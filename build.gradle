@@ -37,7 +37,10 @@ jar {
 }
 task fatJar(type: Jar) {
     manifest {
-        attributes 'Implementation-Version': version
+        attributes "Implementation-Title": "DefaultPlugin",
+                "Implementation-Version": "${version}",
+                "Main-Class": "router.Router",
+                "Context-Root": ""
     }
     baseName = 'DefaultServlet'
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
