@@ -1,8 +1,8 @@
 package router;
 
+import defaultHandlers.DefaultHandler;
 import dynamic.IPluginRouter;
 import dynamic.IServlet;
-import handlers.DefaultHandler;
 import protocol.HttpRequest;
 
 public class Router implements IPluginRouter {

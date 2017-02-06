@@ -1,4 +1,4 @@
-package handlers;
+package defaultHandlers;
 
 import dynamic.IServlet;
 import dynamic.ServletBuilder;

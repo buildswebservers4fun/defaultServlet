@@ -26,13 +26,15 @@ repositories {
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.11'
 
-    compile(group: 'edu.rosehulman.csse477.buildswebservers4fun', name: 'webserver3000', version: '1.1.0')
+    compile(group: 'edu.rosehulman.csse477.buildswebservers4fun', name: 'webserver3000', version: '1.1.2')
 }
 
 jar {
     manifest {
-        attributes "Implementation-Title": "DefaultServlet",
-                "Implementation-Version": "${version}"
+        attributes "Implementation-Title": "DefaultPlugin",
+                "Implementation-Version": "${version}",
+                "Main-Class": "router.Router",
+                "Context-Root": ""
     }
 }
 task fatJar(type: Jar) {
