@@ -7,7 +7,7 @@ import dynamic.ServletBuilder;
  * Created by CJ on 1/29/2017.
  */
 public class DefaultHandler {
-	public final static String ROOT_DIR = "";
+	public final static String ROOT_DIR = "web";
 
 	public static IServlet createDefaultHandler(String rootDirectory) {
 		return new ServletBuilder().setGetHandler(new GetHandler(rootDirectory))

@@ -1,18 +1,23 @@
 package router;
 
+import java.io.IOException;
+import java.io.OutputStream;
+
 import defaultHandlers.DefaultHandler;
 import dynamic.IPluginRouter;
 import dynamic.IServlet;
 import protocol.HttpRequest;
+import protocol.response.IHttpResponse;
 
 public class Router implements IPluginRouter {
-	IServlet defaultServlet;
+	private IServlet defaultServlet;
+	private OutputStream outStream;
 
 	public Router() {
 		defaultServlet = DefaultHandler.createDefaultHandler(DefaultHandler.ROOT_DIR);
 	}
 
-	public void forwardRequest(HttpRequest request) {
+	public void forwardRequest(HttpRequest request, OutputStream outStream) {
 		// TODO use this code for the users servlet
 		// String[] split = request.getUri().split("/");
 		// // TODO test this
@@ -30,7 +35,19 @@ public class Router implements IPluginRouter {
 		// build404Response();
 		// }
 
-		defaultServlet.handle(request);
+		System.out.println("NEW FORWARD");
+		
+		try {
+			defaultServlet.handle(request, outStream);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public void forwardRequest(HttpRequest request) {
+		// TODO Auto-generated method stub
+		System.out.println("OLD FORWARD");
 	}
 
 }
