@@ -15,15 +15,14 @@ import org.junit.Before;
 import org.junit.Test;
 
 import protocol.HttpRequest;
-import handlers.PutHandler;
-import protocol.response.GenericResponse;
-import protocol.response.PutResponse;
+import defaultHandlers.PutHandler;
+import protocol.response.IHttpResponse;
 
 public class PutHandlerUnitTest {
 
 	private String rootDirectory = "./test";
 	private HttpRequest request;
-	private PutResponse response;
+	private IHttpResponse response;
 	private PutHandler handler;
 	private Field uri;
 	private File file;
@@ -71,7 +70,7 @@ public class PutHandlerUnitTest {
 		assertEquals(true, newDir.isDirectory());
 
 		uri.set(request, "/test");
-		GenericResponse response = (GenericResponse) handler.handlePut(request);
+		IHttpResponse response = handler.handlePut(request);
 
 		assertEquals(400, response.getStatus());
 		newDir.delete();
@@ -86,7 +85,7 @@ public class PutHandlerUnitTest {
 		File newFile = new File(root, "newFile.txt");
 		assertEquals(false, newFile.exists());
 
-		response = (PutResponse) handler.handlePut(request);
+		response = handler.handlePut(request);
 		assertEquals(true, newFile.exists());
 		assertEquals(201, response.getStatus());
 		String fileName = "./test/newFile.txt";
@@ -110,7 +109,7 @@ public class PutHandlerUnitTest {
 		String content = new String(Files.readAllBytes(Paths.get(fileName)));
 		assertEquals("overwrite me!", content);
 
-		response = (PutResponse) handler.handlePut(request);
+		response = handler.handlePut(request);
 		assertEquals(200, response.getStatus());
 
 		content = new String(Files.readAllBytes(Paths.get(fileName)));

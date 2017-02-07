@@ -26,7 +26,7 @@ repositories {
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.11'
 
-    compile(group: 'edu.rosehulman.csse477.buildswebservers4fun', name: 'webserver3000', version: '1.1.4')
+    compile(group: 'edu.rosehulman.csse477.buildswebservers4fun', name: 'webserver3000', version: '1.+')
 }
 
 jar {
@@ -36,22 +36,6 @@ jar {
                 "Main-Class": "router.Router",
                 "Context-Root": ""
     }
-}
-task fatJar(type: Jar) {
-    manifest {
-        attributes "Implementation-Title": "DefaultPlugin",
-                "Implementation-Version": "${version}",
-                "Main-Class": "router.Router",
-                "Context-Root": ""
-    }
-    baseName = 'DefaultServlet'
-    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
-    with jar
-}
-
-task prod(dependsOn: [clean, build, test, fatJar]) {
-    build.mustRunAfter clean
-    fatJar.mustRunAfter test
 }
 
 uploadArchives {

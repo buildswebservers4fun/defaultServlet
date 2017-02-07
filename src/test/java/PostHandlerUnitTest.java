@@ -14,15 +14,13 @@ import org.junit.Before;
 import org.junit.Test;
 
 import protocol.HttpRequest;
-import handlers.PostHandler;
-import protocol.response.GenericResponse;
-import protocol.response.PostResponse;
+import defaultHandlers.PostHandler;
+import protocol.response.IHttpResponse;
 
 public class PostHandlerUnitTest {
 
 	private String rootDirectory = "./test";
 	private HttpRequest request;
-	private PostResponse response;
 	private PostHandler handler;
 	private Field uri;
 	private File file;
@@ -67,7 +65,7 @@ public class PostHandlerUnitTest {
 		newDir.mkdir();
 
 		uri.set(request, "test/");
-		GenericResponse response = (GenericResponse) handler.handlePost(request);
+		IHttpResponse response = handler.handlePost(request);
 
 		assertEquals(400, response.getStatus());
 		newDir.delete();
@@ -80,11 +78,9 @@ public class PostHandlerUnitTest {
 
 		assertEquals(true, file.exists());
 
-		response = (PostResponse) handler.handlePost(request);
+		IHttpResponse response = handler.handlePost(request);
 
 		assertEquals(200, response.getStatus());
-		assertEquals(file, response.getFile());
-
 	}
 
 	@Test
@@ -95,7 +91,7 @@ public class PostHandlerUnitTest {
 		newFile.delete();
 		assertEquals(false, newFile.exists());
 
-		response = (PostResponse) handler.handlePost(request);
+		IHttpResponse response = handler.handlePost(request);
 		assertEquals(201, response.getStatus());
 		assertEquals(true, newFile.exists());
 		newFile.delete();
@@ -117,9 +113,8 @@ public class PostHandlerUnitTest {
 		String content = new String(Files.readAllBytes(Paths.get(fileName)));
 		assertEquals("initial stuff", content);
 
-		response = (PostResponse) handler.handlePost(request);
+		IHttpResponse response = handler.handlePost(request);
 		assertEquals(200, response.getStatus());
-		assertEquals(file, response.getFile());
 
 		content = new String(Files.readAllBytes(Paths.get(fileName)));
 		assertEquals("initial stuff" + "this is a post body", content);
@@ -136,10 +131,9 @@ public class PostHandlerUnitTest {
 		assertEquals(false, newFile.exists());
 
 		String fileName = "./test/newFile.txt";
-		response = (PostResponse) handler.handlePost(request);
+		IHttpResponse response = handler.handlePost(request);
 
 		assertEquals(201, response.getStatus());
-		assertEquals(newFile, response.getFile());
 
 		String content = new String(Files.readAllBytes(Paths.get(fileName)));
 		assertEquals("this is a post body", content);
@@ -160,7 +154,7 @@ public class PostHandlerUnitTest {
 		assertEquals(false, test3Dir.exists());
 		assertEquals(false, testFile.exists());
 
-		response = (PostResponse) handler.handlePost(request);
+		IHttpResponse response = handler.handlePost(request);
 		assertEquals(201, response.getStatus());
 
 		assertEquals(true, testDir.exists());
