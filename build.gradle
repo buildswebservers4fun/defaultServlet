@@ -8,7 +8,7 @@ apply plugin: 'application'
 
 
 group 'edu.rosehulman.csse477.buildswebservers4fun'
-mainClassName = "Library"
+mainClassName = "PluginLoader"
 
 if (System.getenv("CI_BUILD_TAG") != null) {
     version = "${System.getenv("CI_BUILD_TAG")}"
@@ -26,14 +26,14 @@ repositories {
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.11'
 
-    compile(group: 'edu.rosehulman.csse477.buildswebservers4fun', name: 'webserver3000', version: '1.+')
+    compile(group: 'edu.rosehulman.csse477.buildswebservers4fun', name: 'webserver3000', version: '1.1.7')
 }
 
 jar {
     manifest {
         attributes "Implementation-Title": "DefaultPlugin",
                 "Implementation-Version": "${version}",
-                "Main-Class": "router.Router",
+                "Main-Class": "${mainClassName}",
                 "Context-Root": ""
     }
 }
