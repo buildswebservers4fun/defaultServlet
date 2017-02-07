@@ -20,8 +20,6 @@ deploy_test:
   environment:
     name: Test
     url: http://477-33.csse.rose-hulman.edu:8080
-  only:
-    - tags
 
 deploy_maven:
   stage: deploy
