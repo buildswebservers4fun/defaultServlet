@@ -6,6 +6,7 @@ build:
   stage: build
   script:
     - gradle build --info
+    - gradle publishToTest
   tags:
     - java
     - gradle
@@ -14,6 +15,7 @@ deploy:
   stage: deploy
   script:
     - gradle publish
+    - gradle publishToProd
   tags:
     - java
     - gradle

@@ -1,3 +1,7 @@
+plugins {
+    id 'org.hidetake.ssh' version '2.7.0'
+}
+
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
@@ -121,3 +125,64 @@ task codeCoverageInfo (dependsOn: jacocoTestReport) {
     }
 }
 jacocoTestReport.finalizedBy(codeCoverageInfo)
+
+// SSH Publishing
+ssh.settings { knownHosts = allowAnyHosts }
+remotes {
+    prod {
+        host = '477-38.csse.rose-hulman.edu'
+        user = System.getenv('SSH_USER')
+        password = System.getenv('SSH_PASSWORD')
+    }
+    test {
+        host = '477-33.csse.rose-hulman.edu'
+        user = System.getenv('SSH_USER')
+        password = System.getenv('SSH_PASSWORD')
+    }
+}
+
+task publishToTest(dependsOn: jar) << {
+    ssh.run {
+        session(remotes.test) {
+            println "Checking if remote /tmp/webserver exists ..."
+            def result = execute('if test -d /tmp/defaultPlugin; then echo "exists"; fi')
+            if(result != "exists") {
+                println("Remote /tmp/defaultPlugin does not exist, creating a new one...")
+                execute('mkdir -p /tmp/defaultPlugin')
+                println("Remote /tmp/defaultPlugin created!")
+            }
+            println "Transfering file from local build/distributions to remote /tmp/defaultPlugin ..."
+            put from: "${buildDir}/libs/defaultServlet-${version}.jar", into: '/tmp/defaultPlugin'
+            println "Removing old versions of plugin"
+            execute('rm defaultServlet-*.jar || true', pty: true)
+            println "Copying data from the temp folder to the plugin folder ..."
+            execute('cp /tmp/defaultPlugin/* /home/csse/webserver/plugins', pty: true)
+            println "Done! Clearing the tmp folder ..."
+            execute('rm -rf /tmp/defaultPlugin')
+            println "All done!"
+        }
+    }
+}
+
+task publishToProd(dependsOn: jar) << {
+    ssh.run {
+        session(remotes.prod) {
+            println "Checking if remote /tmp/webserver exists ..."
+            def result = execute('if test -d /tmp/defaultPlugin; then echo "exists"; fi')
+            if(result != "exists") {
+                println("Remote /tmp/defaultPlugin does not exist, creating a new one...")
+                execute('mkdir -p /tmp/defaultPlugin')
+                println("Remote /tmp/defaultPlugin created!")
+            }
+            println "Transfering file from local build/distributions to remote /tmp/defaultPlugin ..."
+            put from: "${buildDir}/libs/defaultServlet-${version}.jar", into: '/tmp/defaultPlugin'
+            println "Removing old versions of plugin"
+            execute('rm defaultServlet-*.jar || true', pty: true)
+            println "Copying data from the temp folder to the plugin folder ..."
+            execute('cp /tmp/defaultPlugin/* /home/csse/webserver/plugins', pty: true)
+            println "Done! Clearing the tmp folder ..."
+            execute('rm -rf /tmp/defaultPlugin')
+            println "All done!"
+        }
+    }
+}
