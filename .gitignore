@@ -301,6 +301,9 @@ hs_err_pid*
 .gradle
 /build/
 
+# Avoid ignoring Gradle build file (contains manifest!)
+!build.gradle
+
 # Ignore Gradle GUI config
 gradle-app.setting
 
@@ -316,3 +319,7 @@ gradle-app.setting
 # End of https://www.gitignore.io/api/eclipse,gradle,intellij,java,linux,macos,python,windows,maven
 .idea/
 logs/
+
+
+### Testing ###
+/tempWeb/

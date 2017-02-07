@@ -1,12 +1,13 @@
-package handlers;
+package defaultHandlers;
+
+import java.io.File;
+import java.util.HashMap;
 
 import dynamic.handler.IHeadHandler;
 import protocol.HttpRequest;
 import protocol.Protocol;
-import protocol.response.HeadResponse;
+import protocol.response.HttpResponseBuilder;
 import protocol.response.IHttpResponse;
-
-import java.io.File;
 
 public class HeadHandler implements IHeadHandler {
 
@@ -15,7 +16,7 @@ public class HeadHandler implements IHeadHandler {
 	public HeadHandler(String rootDirectory) {
 		this.rootDirectory = rootDirectory;
 	}
-
+	
 	public IHttpResponse handleHead(HttpRequest request) {
 		IHttpResponse response;
 		// Map<String, String> header = request.getHeader();
@@ -36,21 +37,40 @@ public class HeadHandler implements IHeadHandler {
 				file = new File(location);
 				if (file.exists()) {
 					// Lets create 200 OK response
-					response = HeadResponse.get200(file, Protocol.CLOSE);
+					response = build200Response(file);
 				} else {
 					// File does not exist so lets create 404 file not found
 					// code
-					response = HeadResponse.get404(Protocol.CLOSE);
+					return build404Response();
 				}
 			} else { // Its a file
 						// Lets create 200 OK response
-				response = HeadResponse.get200(file, Protocol.CLOSE);
+				response = build200Response(file);
 			}
 		} else {
 			// File does not exist so lets create 404 file not found code
-			response = HeadResponse.get404(Protocol.CLOSE);
+			response = build404Response();
 		}
 		return response;
+	}
+	
+	private IHttpResponse build404Response() {
+		HttpResponseBuilder responseBuilder = new HttpResponseBuilder();
+		responseBuilder.setStatus(Protocol.NOT_FOUND_CODE);
+		responseBuilder.setPhrase(Protocol.NOT_FOUND_TEXT);
+		responseBuilder.setHeaders(new HashMap<String, String>());
+		responseBuilder.setConnection(Protocol.CLOSE);
+		return responseBuilder.build();
+	}
+	
+	private IHttpResponse build200Response(File file) {
+		HttpResponseBuilder responseBuilder = new HttpResponseBuilder();
+		responseBuilder.setStatus(Protocol.OK_CODE);
+		responseBuilder.setPhrase(Protocol.OK_TEXT);
+		responseBuilder.setHeaders(new HashMap<String, String>());
+		responseBuilder.setFileBody(file);
+		responseBuilder.setConnection(Protocol.CLOSE);
+		return responseBuilder.build();
 	}
 
 }
