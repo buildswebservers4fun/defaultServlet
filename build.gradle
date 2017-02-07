@@ -155,7 +155,9 @@ task publishToTest(dependsOn: jar) << {
             println "Transfering file from local build/distributions to remote /tmp/defaultPlugin ..."
             put from: "${buildDir}/libs/defaultServlet-${version}.jar", into: '/tmp/defaultPlugin'
             println "Removing old versions of plugin"
-            remove '/home/csse/webserver/plugins/defaultServlet-*.jar'
+            try {
+                remove '/home/csse/webserver/plugins/defaultServlet-*.jar'
+            } catch(Exception) {}
             println "Copying data from the temp folder to the plugin folder ..."
             execute('cp /tmp/defaultPlugin/* /home/csse/webserver/plugins', pty: true)
             println "Done! Clearing the tmp folder ..."
@@ -178,7 +180,9 @@ task publishToProd(dependsOn: jar) << {
             println "Transfering file from local build/distributions to remote /tmp/defaultPlugin ..."
             put from: "${buildDir}/libs/defaultServlet-${version}.jar", into: '/tmp/defaultPlugin'
             println "Removing old versions of plugin"
-            remove '/home/csse/webserver/plugins/defaultServlet-*.jar'
+            try {
+                remove '/home/csse/webserver/plugins/defaultServlet-*.jar'
+            } catch(Exception) {}
             println "Copying data from the temp folder to the plugin folder ..."
             execute('cp /tmp/defaultPlugin/* /home/csse/webserver/plugins', pty: true)
             println "Done! Clearing the tmp folder ..."
