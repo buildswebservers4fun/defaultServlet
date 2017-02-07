@@ -14,13 +14,15 @@ apply plugin: 'application'
 group 'edu.rosehulman.csse477.buildswebservers4fun'
 mainClassName = "PluginLoader"
 
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+
 if (System.getenv("CI_BUILD_TAG") != null) {
     version = "${System.getenv("CI_BUILD_TAG")}"
 } else {
     version = '1.0.0-SNAPSHOT'
 }
-
-sourceCompatibility = 1.5
 
 repositories {
     maven {
@@ -37,8 +39,7 @@ jar {
     manifest {
         attributes "Implementation-Title": "DefaultPlugin",
                 "Implementation-Version": "${version}",
-                "Main-Class": "${mainClassName}",
-                "Context-Root": ""
+                "Main-Class": "${mainClassName}"
     }
 }
 
