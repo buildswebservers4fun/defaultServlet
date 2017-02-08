@@ -10,10 +10,16 @@ import java.nio.file.Paths;
  * Created by CJ on 2/7/2017.
  */
 public class PluginLoader implements IPluginLoader {
+    public static final Path basePath = Paths.get("/");
+
     public void init(PluginRouter router, String rootDirectory) {
-        Path route = Paths.get("/");
         IServlet servlet = DefaultHandler.createDefaultHandler(rootDirectory);
 
-        router.addRoute(route, servlet);
+        router.addRoute(basePath, servlet);
+    }
+
+    @Override
+    public void unload(PluginRouter router) {
+        router.removeRoute(basePath);
     }
 }
