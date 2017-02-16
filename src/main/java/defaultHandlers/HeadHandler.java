@@ -9,6 +9,9 @@ import protocol.Protocol;
 import protocol.response.HttpResponseBuilder;
 import protocol.response.IHttpResponse;
 
+import static defaultHandlers.StaticResponceBuilder.build200Response;
+import static defaultHandlers.StaticResponceBuilder.build404Response;
+
 public class HeadHandler implements IHeadHandler {
 
 	private String rootDirectory;
@@ -53,24 +56,8 @@ public class HeadHandler implements IHeadHandler {
 		}
 		return response;
 	}
-	
-	private IHttpResponse build404Response() {
-		HttpResponseBuilder responseBuilder = new HttpResponseBuilder();
-		responseBuilder.setStatus(Protocol.NOT_FOUND_CODE);
-		responseBuilder.setPhrase(Protocol.NOT_FOUND_TEXT);
-		responseBuilder.setHeaders(new HashMap<String, String>());
-		responseBuilder.setConnection(Protocol.CLOSE);
-		return responseBuilder.build();
-	}
-	
-	private IHttpResponse build200Response(File file) {
-		HttpResponseBuilder responseBuilder = new HttpResponseBuilder();
-		responseBuilder.setStatus(Protocol.OK_CODE);
-		responseBuilder.setPhrase(Protocol.OK_TEXT);
-		responseBuilder.setHeaders(new HashMap<String, String>());
-		responseBuilder.setFileBody(file);
-		responseBuilder.setConnection(Protocol.CLOSE);
-		return responseBuilder.build();
-	}
+
+
+
 
 }

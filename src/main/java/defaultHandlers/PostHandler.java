@@ -11,6 +11,9 @@ import protocol.Protocol;
 import protocol.response.HttpResponseBuilder;
 import protocol.response.IHttpResponse;
 
+import static defaultHandlers.StaticResponceBuilder.build200Response;
+import static defaultHandlers.StaticResponceBuilder.build400Response;
+
 public class PostHandler implements IPostHandler {
 	
 	private String rootDirectory;
@@ -54,33 +57,12 @@ public class PostHandler implements IPostHandler {
 		}
 	}
 	
-	private IHttpResponse build200Response(File file) {
-		HttpResponseBuilder responseBuilder = new HttpResponseBuilder();
-		responseBuilder.setStatus(Protocol.OK_CODE);
-		responseBuilder.setPhrase(Protocol.OK_TEXT);
-		responseBuilder.setHeaders(new HashMap<String, String>());
-		responseBuilder.setFileBody(file);
-		responseBuilder.setConnection(Protocol.CLOSE);
-		
-		return responseBuilder.build();
-	}
-	
 	private IHttpResponse build201Response(File file) {
 		HttpResponseBuilder responseBuilder = new HttpResponseBuilder();
 		responseBuilder.setStatus(Protocol.CREATED_CODE);
 		responseBuilder.setPhrase(Protocol.OK_TEXT);
 		responseBuilder.setHeaders(new HashMap<String, String>());
 		responseBuilder.setFileBody(file);
-		responseBuilder.setConnection(Protocol.CLOSE);
-		
-		return responseBuilder.build();
-	}
-	
-	private IHttpResponse build400Response() {
-		HttpResponseBuilder responseBuilder = new HttpResponseBuilder();
-		responseBuilder.setStatus(Protocol.BAD_REQUEST_CODE);
-		responseBuilder.setPhrase(Protocol.BAD_REQUEST_TEXT);
-		responseBuilder.setHeaders(new HashMap<String, String>());
 		responseBuilder.setConnection(Protocol.CLOSE);
 		
 		return responseBuilder.build();
